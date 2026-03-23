@@ -40,15 +40,15 @@
         </div>
         <div class="mt-8 transition-transform duration-300 group-hover:-translate-y-2">
           <h2 class="font-headline text-2xl font-bold text-on-surface mb-3">魔法棒 (Magic Wand)</h2>
-          <p class="text-on-surface-variant leading-relaxed max-w-md text-sm">探索创意的边界。集成 AI 预测算法与手势感应，专为追求灵感爆发的创造者打造。赋予每一个动作以数字魔法。</p>
+          <p class="text-on-surface-variant leading-relaxed max-w-md text-sm">将枯燥的物理去气过程转化为一场充满仪式感的桌面魔法。创新的星型多孔工作端设计，配合修长优雅的手柄，让你在轻轻挥舞间，不仅带走气泡，更点亮平淡的日常。</p>
           <div class="mt-6 flex gap-4">
             <div class="flex items-center gap-2 text-primary">
-              <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1">bolt</span>
-              <span class="text-[10px] font-bold uppercase tracking-wide">AI 赋能</span>
+              <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1">auto_awesome</span>
+              <span class="text-[10px] font-bold uppercase tracking-wide">星型阵列</span>
             </div>
             <div class="flex items-center gap-2 text-primary">
-              <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1">gesture</span>
-              <span class="text-[10px] font-bold uppercase tracking-wide">智能感应</span>
+              <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1">celebration</span>
+              <span class="text-[10px] font-bold uppercase tracking-wide">奇幻美学</span>
             </div>
           </div>
         </div>
