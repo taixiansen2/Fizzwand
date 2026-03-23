@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>FizzWand - 碳酸自由的魔法之旅</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#006879",
+                        "primary-container": "#00e3fd",
+                        "on-primary": "#ffffff",
+                        "secondary": "#2d6670",
+                        "secondary-container": "#b3ecf7",
+                        "tertiary": "#765a00",
+                        "tertiary-container": "#fec931",
+                        "surface": "#f7f9fb",
+                        "surface-variant": "#e0e3e5",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#3b494c",
+                        "outline": "#6b7a7d",
+                        "outline-variant": "#bac9cc",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container": "#eceef0",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container-highest": "#e0e3e5",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#49d7f4",
+                        "secondary-fixed-dim": "#98d0da",
+                        "tertiary-fixed-dim": "#f3bf26",
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .signature-gradient-text {
+            background: linear-gradient(135deg, #006879 0%, #56e1fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .signature-gradient {
+            background: linear-gradient(135deg, #006879 0%, #56e1fe 100%);
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(24px);
+        }
+        .canvas-16-9 {
+            aspect-ratio: 16 / 9;
+            width: 100%;
+            max-width: 1280px;
+        }
+        .soft-product-shadow {
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.04)) drop-shadow(0 10px 10px rgba(0, 0, 0, 0.02));
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #006879;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-surface-container-low font-body text-on-surface">
+    <div id="root"></div>
+
+    <!-- React and Libraries -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { createRoot } = ReactDOM;
+        const { MemoryRouter, Routes, Route, Link, useNavigate, useLocation } = ReactRouterDOM;
+
+        // --- Shared Components ---
+
+        const Header = ({ slideNumber, activePath }) => {
+            const navItems = [
+                { name: 'Overview', path: '/' },
+                { name: 'Summary', path: '/summary' },
+                { name: 'Inspiration', path: '/inspiration' },
+                { name: 'Technology', path: '/technology' },
+                { name: 'Products', path: '/products' },
+                { name: 'Artisan', path: '/artisan' },
+                { name: 'Marketing', path: '/marketing' },
+                { name: 'Vision', path: '/vision' },
+                { name: 'Thanks', path: '/thanks' }
+            ];
+
+            return (
+                <header class="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl shadow-sm">
+                    <div class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+                        <Link to="/" class="text-2xl font-black text-slate-900 dark:text-white tracking-tighter font-headline">FizzWand</Link>
+                        <nav class="hidden md:flex items-center gap-6">
+                            {navItems.map(item => (
+                                <Link 
+                                    key={item.path}
+                                    to={item.path}
+                                    className={`font-manrope font-bold tracking-tight text-sm transition-colors ${
+                                        activePath === item.path 
+                                        ? "text-cyan-600 dark:text-cyan-400 border-b-2 border-cyan-500 pb-1" 
+                                        : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+                                    }`}
+                                >
+                                    {item.name}
+                                </Link>
+                            ))}
+                        </nav>
+                        <div class="flex items-center gap-4">
+                            {slideNumber && (
+                                <span class="hidden md:block text-xs font-bold text-primary px-3 py-1 bg-primary-container/20 rounded-full tracking-widest">
+                                    SLIDE {slideNumber}
+                                </span>
+                            )}
+                            <span class="material-symbols-outlined cursor-pointer hover:bg-slate-50/50 p-2 rounded-full transition-all">more_vert</span>
+                        </div>
+                    </div>
+                </header>
+            );
+        };
+
+        const Footer = () => (
+            <footer class="fixed bottom-0 w-full py-4 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-t border-slate-100 dark:border-slate-800/50 z-50">
+                <div class="flex flex-col md:flex-row justify-between items-center px-12 w-full gap-4 max-w-screen-2xl mx-auto">
+                    <div class="text-[10px] font-bold text-slate-400">FizzWand Tech-Lifestyle</div>
+                    <div class="font-inter text-[10px] uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                        © 2024 FizzWand. All rights reserved.
+                    </div>
+                    <div class="flex gap-6">
+                        <a class="font-inter text-[10px] uppercase tracking-widest text-slate-400 hover:text-cyan-500 transition-colors" href="#">Privacy</a>
+                        <a class="font-inter text-[10px] uppercase tracking-widest text-slate-400 hover:text-cyan-500 transition-colors" href="#">Terms</a>
+                    </div>
+                </div>
+            </footer>
+        );
+
+        const PageWrapper = ({ children, slideNumber }) => {
+            const location = useLocation();
+            return (
+                <div className="min-h-screen flex flex-col bg-surface-container-low">
+                    <Header slideNumber={slideNumber} activePath={location.pathname} />
+                    <div className="flex-grow">
+                        {children}
+                    </div>
+                    <Footer />
+                </div>
+            );
+        };
+
+        // --- Screens ---
+
+        const Screen1_Intro = () => {
+            const navigate = useNavigate();
+            return (
+                <PageWrapper slideNumber="01/08">
+                    <main class="relative min-h-screen flex items-center px-12 lg:px-24">
+                        <div class="absolute inset-0 z-0 bg-white"></div>
+                        <div class="relative z-10 grid grid-cols-12 w-full items-center gap-8">
+                            <div class="col-span-12 lg:col-span-5 flex flex-col items-start">
+                                <div class="mb-4">
+                                    <span class="inline-block px-3 py-1 bg-secondary-container/30 text-primary font-bold rounded-full text-[10px] tracking-widest uppercase font-label">
+                                        Premium Editorial
+                                    </span>
+                                </div>
+                                <h1 class="font-headline font-extrabold text-[4rem] leading-[1.1] text-on-surface tracking-tighter mb-2">
+                                    FizzWand<br/><span class="text-primary font-bold">菲兹旺德</span>
+                                </h1>
+                                <div class="h-1 w-24 bg-primary-fixed-dim mb-8"></div>
+                                <p class="text-[1.75rem] font-headline font-medium text-on-surface-variant leading-tight max-w-md">
+                                    理解您的小习惯
+                                </p>
+                                <p class="text-primary/60 font-label text-sm tracking-wider mt-2 uppercase">
+                                    The Magic Wand for Carbonation Freedom
+                                </p>
+                                <div class="mt-16 flex gap-4">
+                                    <button onClick={() => navigate('/summary')} class="px-8 py-4 bg-gradient-to-r from-primary to-cyan-500 text-white font-bold rounded-xl shadow-lg shadow-primary/10 flex items-center gap-3">
+                                        了解更多 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                                    </button>
+                                    <button onClick={() => navigate('/technology')} class="px-8 py-4 bg-white border border-outline-variant/20 text-on-surface font-semibold rounded-xl hover:bg-surface-container-low transition-colors">
+                                        技术规格
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-span-12 lg:col-span-7 relative h-[600px] flex items-center justify-center">
+                                <img alt="FizzWand Product" class="w-full h-auto max-h-[80%] object-contain soft-product-shadow" src="https://lh3.googleusercontent.com/aida/ADBb0uilO8rJIEiLoW5BlimyCkN-ZxqVkZ0uH270GIH5o5oYOvb7ExJMg1nxWuIaCax8AnyShiLsx9wS5Rh1JdS7SIRkk6inmceHRxywjGRd4QC4J-LAyYF3iQuwFTx8qq3FqJ3nirBvCF2eCBzL2ipvRtwbYT65407o3rbpbatQUmOXmvoIGRn16LneJzizdMM-7eAXUuFgnQXMJBKTe4rnwueQjPfEgQC8qmpeQbVamOrKfWs2gF-Z6Wn3uKYvzume1_0KBoBLtk_oqw" />
+                                <div class="absolute top-12 right-0 flex flex-col gap-2 opacity-40">
+                                    <div class="w-32 h-[1px] bg-outline"></div>
+                                    <div class="text-[10px] text-on-surface-variant font-label uppercase text-right tracking-widest">Editorial Series 2024</div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </PageWrapper>
+            );
+        };
+
+        const Screen2_Summary = () => (
+            <PageWrapper slideNumber="02/08">
+                <main class="flex-grow flex flex-col items-center justify-center px-6 md:px-20 py-24 overflow-hidden">
+                    <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                        <div class="lg:col-span-5 flex flex-col space-y-12">
+                            <div class="space-y-4">
+                                <p class="text-primary font-headline font-bold text-sm tracking-[0.2em] uppercase">Executive Summary</p>
+                                <h1 class="text-on-surface font-headline font-extrabold text-5xl md:text-6xl tracking-tight leading-tight">项目摘要</h1>
+                            </div>
+                            <div class="space-y-8">
+                                {[
+                                    { icon: 'science', title: '便携式物理去气', desc: '创新型手持设备，通过精准物理震荡实现液体快速去气，提升饮用口感与纯净度。' },
+                                    { icon: 'hub', title: '微观成核技术', desc: '利用前沿微观成核原理，在分子层面优化流体结构，释放隐藏的醇厚风味。' },
+                                    { icon: 'verified', title: '国家专利申请中', desc: '核心技术已进入国家专利审核阶段，构筑品牌高技术护城河与法律保障。' },
+                                    { icon: 'style', title: '倡导全新生活方式', desc: '超越工具属性，FizzWand旨在定义一种追求极致、极简与科技感的现代生活美学。' }
+                                ].map((item, i) => (
+                                    <div key={i} class="group flex gap-6">
+                                        <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-surface-container-low text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                                            <span class="material-symbols-outlined text-2xl">{item.icon}</span>
+                                        </div>
+                                        <div class="space-y-1">
+                                            <h3 class="text-xl font-headline font-bold text-on-surface">{item.title}</h3>
+                                            <p class="text-on-surface-variant leading-relaxed text-sm">{item.desc}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div class="lg:col-span-7 relative">
+                            <div class="bg-surface-container-low rounded-xl p-1 w-full aspect-[4/3] flex items-center justify-center relative overflow-hidden">
+                                <div class="absolute inset-0 opacity-10 pointer-events-none">
+                                    <svg class="w-full h-full" viewBox="0 0 400 300">
+                                        <circle class="text-primary" cx="200" cy="150" fill="none" r="100" stroke="currentColor" stroke-width="0.5"></circle>
+                                        <circle class="text-primary" cx="200" cy="150" fill="none" r="140" stroke="currentColor" stroke-width="0.5"></circle>
+                                        <line class="text-primary" stroke="currentColor" stroke-width="0.5" x1="0" x2="400" y1="150" y2="150"></line>
+                                        <line class="text-primary" stroke="currentColor" stroke-width="0.5" x1="200" x2="200" y1="0" y2="300"></line>
+                                    </svg>
+                                </div>
+                                <div class="relative z-10 w-full max-w-lg p-8">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-primary/5 p-6 rounded-xl border border-primary/10 flex flex-col items-center text-center space-y-3">
+                                            <span class="material-symbols-outlined text-4xl text-primary" style={{fontVariationSettings: '"FILL" 1'}}>waves</span>
+                                            <span class="text-[10px] font-bold tracking-widest text-primary uppercase">Core Force</span>
+                                            <p class="text-on-surface font-bold text-xs">Sonic Purity</p>
+                                        </div>
+                                        <div class="bg-white p-6 rounded-xl shadow-sm flex flex-col items-center text-center space-y-3">
+                                            <span class="material-symbols-outlined text-4xl text-primary" style={{fontVariationSettings: '"FILL" 1'}}>air</span>
+                                            <span class="text-[10px] font-bold tracking-widest text-primary uppercase">Process</span>
+                                            <p class="text-on-surface font-bold text-xs">Rapid De-aeration</p>
+                                        </div>
+                                        <div class="bg-white p-6 rounded-xl shadow-sm flex flex-col items-center text-center space-y-3">
+                                            <span class="material-symbols-outlined text-4xl text-primary" style={{fontVariationSettings: '"FILL" 1'}}>bolt</span>
+                                            <span class="text-[10px] font-bold tracking-widest text-primary uppercase">Efficiency</span>
+                                            <p class="text-on-surface font-bold text-xs">Instant Result</p>
+                                        </div>
+                                        <div class="signature-gradient p-6 rounded-xl text-white flex flex-col items-center text-center space-y-3">
+                                            <span class="material-symbols-outlined text-4xl text-white" style={{fontVariationSettings: '"FILL" 1'}}>auto_awesome</span>
+                                            <span class="text-[10px] font-bold tracking-widest text-white/70 uppercase">Value</span>
+                                            <p class="font-bold text-xs">Micro-Nucleation</p>
+                                        </div>
+                                    </div>
+                                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-on-surface text-white px-6 py-2 rounded-full font-headline font-bold text-xs shadow-xl flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-lg">memory</span> FizzWand Core
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </PageWrapper>
+        );
+
+        const Screen3_Inspiration = () => (
+            <PageWrapper slideNumber="03/08">
+                <main class="min-h-screen flex items-center justify-center bg-white">
+                    <div class="w-full h-full max-w-[1920px] aspect-video grid grid-cols-1 md:grid-cols-2 bg-white relative">
+                        <div class="flex flex-col justify-center px-24 py-12 z-10">
+                            <div class="mb-6">
+                                <span class="text-primary font-headline text-sm font-bold tracking-[0.2em] uppercase">Inspiration</span>
+                                <div class="h-1 w-12 bg-primary-container mt-2"></div>
+                            </div>
+                            <h1 class="font-headline text-[3.5rem] leading-tight font-extrabold text-on-surface mb-8 tracking-tighter">灵感与背景</h1>
+                            <div class="mb-12">
+                                <p class="text-2xl font-light text-on-surface-variant italic border-l-4 border-primary-container pl-6 leading-relaxed">“理解您的小习惯”</p>
+                            </div>
+                            <div class="max-w-md space-y-6">
+                                <p class="text-lg leading-relaxed text-on-surface-variant font-body">对于<span class="text-primary font-semibold px-1">肠胃敏感</span>的饮者而言，气泡水带来的不仅仅是清爽，往往还伴随着胀气与不适。市面上极少有产品关注到碳酸口感与生理舒适之间的微妙平衡。</p>
+                                <p class="text-lg leading-relaxed text-on-surface-variant font-body">FizzWand 的诞生，旨在让您的饮用体验更加轻盈。通过创新的除气技术，我们让每一口饮品都回归纯净，将繁琐的化学过程简化为一次指尖的“魔法”。</p>
+                            </div>
+                        </div>
+                        <div class="relative overflow-hidden h-full">
+                            <img alt="FizzWand Close Up" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_bRArX9d9SFpU1GS0cFODORlPxbsa6oEmRGtrJ9MaQy4AfWahFjNm_xd6_LjCWvAWSDW9IaBaIVFVZcnAsy6qAVNDXkjDvkHHsLc5R6AjmPfenVAL0vRS_fkWPYxTqrWQwzUvCgNpI0ie_ererMOPDI5SS6ad6lQ7WGuHJf7k2SzwUxIiM-p_6KsmSZIP8KWYHPs0UYD3Z-riVoiLeW9fycwdnh2GBuUqDNuPHSDXh6cVwZuVifncoOsLtIpFFhXq92CCKx_o2oI" />
+                            <div class="absolute inset-0 bg-gradient-to-r from-white via-transparent to-transparent"></div>
+                            <div class="absolute top-12 right-12 mix-blend-overlay opacity-30 select-none pointer-events-none">
+                                <span class="font-headline text-8xl font-extrabold tracking-tighter">FIZZ</span>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </PageWrapper>
+        );
+
+        const Screen4_Technology = () => (
+            <PageWrapper slideNumber="04/08">
+                <main class="min-h-screen pt-24 pb-16 px-12 max-w-[1600px] mx-auto">
+                    <section class="mb-12">
+                        <div class="flex flex-col gap-2">
+                            <span class="text-[0.75rem] font-bold tracking-[0.2em] text-primary uppercase font-label">Core Technology</span>
+                            <h1 class="text-[3.5rem] font-extrabold text-on-surface font-headline leading-tight tracking-tighter">技术原理与产品优势</h1>
+                        </div>
+                    </section>
+                    <div class="grid grid-cols-12 gap-8">
+                        <div class="col-span-12 lg:col-span-4 flex flex-col gap-10">
+                            <div class="p-8 bg-surface-container-low rounded-xl border border-outline-variant/10">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <span class="w-2 h-8 bg-primary"></span>
+                                    <h2 class="text-xl font-bold font-headline">成核反应 (Nucleation)</h2>
+                                </div>
+                                <p class="text-on-surface-variant leading-relaxed mb-6 text-sm">通过微观物理结构的精准引导，使气体分子在受控界面迅速聚集成核。这种物理反应替代了传统化学添加，实现了清洁且高效的能量转化过程。</p>
+                                <div class="flex gap-2">
+                                    <span class="px-3 py-1 bg-secondary-container text-primary rounded-full text-[10px] font-bold tracking-wider uppercase">Physical Reaction</span>
+                                    <span class="px-3 py-1 bg-primary-container/20 text-primary rounded-full text-[10px] font-bold tracking-wider uppercase">Eco-Friendly</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-6">
+                                {[
+                                    { id: '01', title: '极速 (Speed)', desc: '毫秒级响应速度，即刻完成气泡生成，无需漫长等待。' },
+                                    { id: '02', title: '无害 (Harmless)', desc: '纯物理过程，零化学残留。守护每一口纯净。' },
+                                    { id: '03', title: '优雅 (Elegance)', desc: '极简工业设计语言，将复杂的原子级反应转化为美感。' }
+                                ].map(adv => (
+                                    <div key={adv.id} class="flex gap-4 items-start">
+                                        <span class="text-3xl font-extrabold text-primary/20 font-headline">{adv.id}</span>
+                                        <div>
+                                            <h3 class="text-md font-bold text-on-surface mb-1">{adv.title}</h3>
+                                            <p class="text-xs text-on-surface-variant leading-relaxed">{adv.desc}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div class="col-span-12 lg:col-span-8 flex items-center justify-center relative min-h-[450px] bg-surface-container-low rounded-2xl overflow-hidden">
+                            <div class="absolute inset-0 opacity-10 pointer-events-none" style={{backgroundImage: 'radial-gradient(#006571 1px, transparent 1px)', backgroundSize: '40px 40px'}}></div>
+                            <div class="relative w-full h-full flex items-center justify-center p-12">
+                                <div class="absolute w-[2px] h-[70%] bg-gradient-to-b from-primary via-primary-container to-transparent z-10 shadow-[0_0_20px_rgba(0,227,253,0.5)]"></div>
+                                <div class="relative z-20 flex flex-wrap justify-center gap-12 max-w-xl">
+                                    <div class="w-28 h-28 rounded-full bg-white/70 backdrop-blur-xl border border-primary/10 flex items-center justify-center shadow-2xl relative">
+                                        <span class="material-symbols-outlined text-primary text-3xl">bubble_chart</span>
+                                        <div class="absolute -bottom-6 text-[10px] font-bold text-primary tracking-widest uppercase">Initial Stage</div>
+                                    </div>
+                                    <div class="w-40 h-40 rounded-full signature-gradient flex items-center justify-center shadow-xl transform scale-110">
+                                        <div class="text-center text-white">
+                                            <div class="text-[10px] font-bold tracking-widest mb-1 opacity-80">NUCLEUS</div>
+                                            <div class="text-2xl font-black font-headline tracking-tighter">100%</div>
+                                            <div class="text-[8px] font-medium tracking-tight mt-1 uppercase">Physical Reaction</div>
+                                        </div>
+                                    </div>
+                                    <div class="w-28 h-28 rounded-full bg-white/70 backdrop-blur-xl border border-primary/10 flex items-center justify-center shadow-2xl">
+                                        <span class="material-symbols-outlined text-primary text-3xl">flare</span>
+                                        <div class="absolute -bottom-6 text-[10px] font-bold text-primary tracking-widest uppercase">Activation</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </PageWrapper>
+        );
+
+        const Screen5_Products = () => (
+            <PageWrapper slideNumber="05/08">
+                <main class="flex-grow flex flex-col px-16 pt-24 pb-24 max-w-screen-2xl mx-auto">
+                    <div class="mb-12">
+                        <span class="text-[0.75rem] font-bold tracking-wider text-primary uppercase block mb-2">Portfolio Overview</span>
+                        <h1 class="font-headline text-[2.5rem] font-extrabold tracking-tight text-on-surface leading-tight">
+                            产品线: <span class="text-primary">基础版</span>与<span class="text-primary">魔法棒</span>
+                        </h1>
+                    </div>
+                    <div class="flex-grow grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div class="relative group">
+                            <div class="bg-surface-container-low rounded-xl overflow-hidden h-[340px] flex items-center justify-center relative transition-all duration-300 group-hover:bg-surface-container">
+                                <img alt="Classic" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ADBb0uhKZfWxIRBHxP1miT9U6rWmcNd0-i1GTb4CWOK7BlKEObrmm6WpH8d7jgEZKhMZoQn-q1tBPHSs_bAbD-ZHUrseMe01SJdcedXOJxXMu0VU5DTuaDunwm9s_BCj-J2ED_h76F2zj-ffuyJTDGztgsO-NU6llzU9KV3W9DI3jOUVo8vu7LYvC6xW2tJGZamHdkFHzyTW41dW5gvGdvtMqWEXfvhQke7SnMavrZ85Onq3bd6n3aZhddPSU-r06AVgD0KcePdQR8it" />
+                                <div class="absolute top-6 left-6">
+                                    <span class="bg-white/80 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-on-surface-variant tracking-widest uppercase">Classic Series</span>
+                                </div>
+                            </div>
+                            <div class="mt-8">
+                                <h2 class="font-headline text-2xl font-bold text-on-surface mb-3">基础版 (Classic)</h2>
+                                <p class="text-on-surface-variant leading-relaxed max-w-md text-sm">稳健的技术底座，专注于核心功能的极致打磨。提供纯粹、可靠的交互体验，是开启 FizzWand 生态的理想起点。</p>
+                                <div class="mt-6 flex gap-4">
+                                    <div class="flex items-center gap-2 text-primary">
+                                        <span class="material-symbols-outlined text-sm">check_circle</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wide">核心交互</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-primary">
+                                        <span class="material-symbols-outlined text-sm">check_circle</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wide">稳定连接</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relative group">
+                            <div class="bg-surface-container-low rounded-xl overflow-hidden h-[340px] flex items-center justify-center relative transition-all duration-300 group-hover:bg-surface-container">
+                                <img alt="Magic Wand" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ADBb0ugPOBkXQwuvslxVeQ4WntspMjlDFMbatCTHgcB61TvHMzgtIztwE3GvrQdcB51oIWVi0w4kEm6bQ63YyGGvGsROAjVxhFMynxG-2ApDagk7C6uLH9tZBiD-dUmPhha2bqZSz0Koy9bDgepapb6u_K0jFI_kujuGG39Ky8EVmy2iEKdMkK_GA38ggGe2suIlTdsGJHDxsH1iRbt-Bx8BlotRV3xdBQitY_X5OeXOhWU-n3LH2W1R4GKyROIM5w7rdprsVKFB9EcTng" />
+                                <div class="absolute top-6 left-6">
+                                    <span class="bg-primary/20 backdrop-blur border border-primary/30 px-3 py-1 rounded-full text-[10px] font-bold text-primary tracking-widest uppercase">Pro Edition</span>
+                                </div>
+                            </div>
+                            <div class="mt-8">
+                                <h2 class="font-headline text-2xl font-bold text-on-surface mb-3">魔法棒 (Magic Wand)</h2>
+                                <p class="text-on-surface-variant leading-relaxed max-w-md text-sm">探索创意的边界。集成 AI 预测算法与手势感应，专为追求灵感爆发的创造者打造。赋予每一个动作以数字魔法。</p>
+                                <div class="mt-6 flex gap-4">
+                                    <div class="flex items-center gap-2 text-primary">
+                                        <span class="material-symbols-outlined text-sm" style={{fontVariationSettings: '"FILL" 1'}}>bolt</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wide">AI 赋能</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-primary">
+                                        <span class="material-symbols-outlined text-sm" style={{fontVariationSettings: '"FILL" 1'}}>gesture</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wide">智能感应</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </PageWrapper>
+        );
+
+        const Screen6_Artisan = () => (
+            <PageWrapper slideNumber="06/08">
+                <main class="w-full min-h-screen pt-32 pb-24 px-16 flex flex-col justify-start max-w-screen-2xl mx-auto">
+                    <div class="mb-16">
+                        <p class="font-label text-xs uppercase tracking-[0.2em] text-primary mb-3">Product Line Strategy</p>
+                        <h1 class="font-headline text-[3.25rem] font-extrabold tracking-tight text-on-surface leading-tight">
+                            产品线: <span class="text-primary">雕塑版</span>与联名愿景
+                        </h1>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
+                        <section class="space-y-10">
+                            <div class="flex items-center gap-4">
+                                <div class="h-px w-10 bg-primary"></div>
+                                <h2 class="font-headline text-2xl font-bold tracking-tight text-on-surface">雕塑版 (Artisan)</h2>
+                            </div>
+                            <div class="space-y-6 pl-14">
+                                <div class="aspect-video w-full overflow-hidden rounded-xl bg-surface-container-low mb-8 shadow-sm">
+                                    <img alt="Artisan" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0ugn7Vf5QaTcPMIYI3fx_Lt4kgAeLN1aD0Bz5bHbsxjhoJHazJdCojji0OdDnDCj_L5J_BKXLVkcNkYXZE2VqhIwG6D1ueg27BiDtUD3xSH0bQRmWrwZQaTjbl6e29F4UA4mrpn-y9_B-E6MspPUPFXU4OxPI2MQqONDnUz1hoL6QtYshBhMJpB9AnwlRBgfMeaBuLERhxN4bTw6OU4WIx8-ijnPUBd6q1NZ-wBRn99Tf4sANvVWuev_Fi7E16zqYzBB_cZjRXMsvg" />
+                                </div>
+                                <div class="space-y-3">
+                                    <span class="text-[10px] font-bold text-primary uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full">Materiality</span>
+                                    <p class="text-on-surface text-lg font-medium leading-relaxed">手工雕刻 925 纯银与大叶紫檀木柄。融合顶级树脂雕花工艺。</p>
+                                </div>
+                                <div class="pt-6 flex gap-12 border-t border-outline-variant/15">
+                                    <div class="flex flex-col"><span class="text-[10px] uppercase tracking-widest text-outline mb-1">Silver Content</span><span class="text-2xl font-bold text-primary">92.5%</span></div>
+                                    <div class="flex flex-col"><span class="text-[10px] uppercase tracking-widest text-outline mb-1">Handcrafted</span><span class="text-2xl font-bold text-primary">48h+</span></div>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="space-y-10">
+                            <div class="flex items-center gap-4">
+                                <div class="h-px w-10 bg-primary"></div>
+                                <h2 class="font-headline text-2xl font-bold tracking-tight text-on-surface">联名愿景 (Co-branding)</h2>
+                            </div>
+                            <div class="space-y-8 pl-14">
+                                <div class="space-y-3">
+                                    <span class="text-[10px] font-bold text-primary uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full">Lifestyle Synergy</span>
+                                    <p class="text-on-surface text-lg font-medium leading-relaxed">跨界联动全球顶尖生活方式品牌。将 FizzWand 融入高净值人群的日常美学空间。</p>
+                                </div>
+                                <div class="space-y-3">
+                                    <span class="text-[10px] font-bold text-primary uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full">Limited Editions</span>
+                                    <p class="text-on-surface-variant text-md leading-relaxed">季度性限量配色方案。结合当代艺术家灵感，打造具有时效性与稀缺性的限量款。</p>
+                                </div>
+                                <div class="mt-8 flex flex-wrap gap-3">
+                                    <span class="px-5 py-1.5 rounded-full bg-surface-container-low text-[10px] font-bold text-on-surface-variant border border-outline-variant/20 tracking-wider uppercase">Lifestyle Collabs</span>
+                                    <span class="px-5 py-1.5 rounded-full bg-surface-container-low text-[10px] font-bold text-on-surface-variant border border-outline-variant/20 tracking-wider uppercase">Electric Blue Limits</span>
+                                    <span class="px-5 py-1.5 rounded-full bg-primary-container/10 text-[10px] font-bold text-primary tracking-wider uppercase">Global Vision 2024</span>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </main>
+            </PageWrapper>
+        );
+
+        const Screen7_Marketing = () => (
+            <PageWrapper slideNumber="07/08">
+                <main class="flex-grow flex items-center justify-center px-8 md:px-20 pt-24 pb-4">
+                    <div class="w-full max-w-screen-2xl aspect-16-9 bg-white overflow-hidden flex flex-col relative shadow-2xl rounded-xl">
+                        <div class="absolute top-0 right-0 w-1/3 h-full bg-surface-container-low -z-10 translate-x-12"></div>
+                        <div class="px-16 pt-12">
+                            <div class="flex items-center gap-4 mb-4">
+                                <span class="h-[2px] w-12 bg-primary"></span>
+                                <span class="text-primary font-bold tracking-widest uppercase text-sm font-headline">Section 05</span>
+                            </div>
+                            <h1 class="text-6xl font-extrabold font-headline tracking-tighter text-on-surface mb-6">营销策略</h1>
+                        </div>
+                        <div class="grid grid-cols-12 gap-12 px-16 flex-grow items-start">
+                            <div class="col-span-12 lg:col-span-7 flex flex-col gap-6">
+                                <div class="p-10 bg-surface-container-low rounded-lg relative overflow-hidden group">
+                                    <h2 class="text-primary font-headline font-bold text-xl mb-4 tracking-tight">核心Slogan</h2>
+                                    <p class="text-4xl font-extrabold font-headline leading-tight text-on-surface-variant">
+                                        FizzWand, <br/><span class="text-primary">理解您的小习惯</span>
+                                    </p>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div class="space-y-4">
+                                        <div class="flex items-center gap-3 text-primary">
+                                            <span class="material-symbols-outlined" style={{fontVariationSettings: '"FILL" 1'}}>campaign</span>
+                                            <h3 class="font-bold font-headline text-lg">内容营销</h3>
+                                        </div>
+                                        <div class="bg-secondary-container/20 p-4 rounded-lg">
+                                            <span class="font-bold text-primary text-sm block mb-1">感官叙事 ASMR</span>
+                                            <p class="text-on-surface-variant text-xs leading-relaxed">捕捉FizzWand运作时的纯粹音效。</p>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-4">
+                                        <div class="flex items-center gap-3 text-primary">
+                                            <span class="material-symbols-outlined" style={{fontVariationSettings: '"FILL" 1'}}>groups</span>
+                                            <h3 class="font-bold font-headline text-lg">社群建立</h3>
+                                        </div>
+                                        <div class="p-4 border-l-4 border-primary-container bg-surface-container-high rounded-sm">
+                                            <p class="text-on-surface-variant text-xs leading-relaxed">打造“智感生活家”专属社群。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-span-12 lg:col-span-5 relative h-[80%]">
+                                <div class="w-full h-full rounded-xl overflow-hidden shadow-xl">
+                                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-0HZBgzK8_m1uCnb2lOpd0ZNtg6L9nLCPcb7jG44YZsEF1Z599Q0IxxKQefhBjLRbHEaIs0yXM2_pR-RjrklsdYLPip56OQFbW26n8NBUTO8g5cMTLaFkMbnC7rys2wjtUSsxWhqNK62yxprA7wQs4sjld_8Y2yxYwLJtKsSA7UtGBxa2VY9PxftBMr7b-S6jpw8CfK-zEHdz0sPA3mfG_iapGTfKUB0iHb8nGNTzuU43d-5ChOvnCiCfD1hV83vSjsRiMnyww8A" />
+                                    <div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pb-8 px-16 flex justify-between items-end">
+                            <div class="flex gap-4"><div class="w-3 h-3 rounded-full bg-primary"></div><div class="w-3 h-3 rounded-full bg-primary-container"></div></div>
+                            <p class="text-[10px] font-label tracking-widest text-outline uppercase">Marketing Framework 2024</p>
+                        </div>
+                    </div>
+                </main>
+            </PageWrapper>
+        );
+
+        const Screen8_Vision = () => (
+            <PageWrapper slideNumber="08/08">
+                <main class="min-h-screen pt-24 pb-12 px-8 md:px-20 max-w-screen-2xl mx-auto flex flex-col justify-center">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20 items-end">
+                        <div class="lg:col-span-5">
+                            <div class="mb-4">
+                                <span class="bg-secondary-container text-primary px-4 py-1 rounded-full text-[10px] font-semibold tracking-widest uppercase">Investment Phase</span>
+                            </div>
+                            <h1 class="text-6xl md:text-7xl font-headline font-extrabold text-on-surface tracking-tighter leading-none mb-6">融资愿景</h1>
+                            <p class="text-xl text-on-surface-variant max-w-md">构建科技与生活的无缝联结，FizzWand 致力于重塑未来交互体验的每一个瞬间。</p>
+                        </div>
+                        <div class="lg:col-span-7 flex flex-col items-end">
+                            <div class="bg-white p-8 rounded-xl w-full max-w-md border-b-4 border-primary shadow-sm">
+                                <div class="flex items-center justify-between mb-4">
+                                    <span class="text-on-surface-variant font-label text-xs uppercase tracking-widest">融资需求 / Requirement</span>
+                                    <span class="material-symbols-outlined text-primary">rocket_launch</span>
+                                </div>
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-5xl font-headline font-black text-primary">10</span>
+                                    <span class="text-xl font-headline font-bold text-on-surface">万</span>
+                                    <span class="ml-auto bg-primary-container/20 text-primary px-3 py-1 rounded text-xs font-bold uppercase">种子轮</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {[
+                            { title: '模具开发', icon: 'precision_manufacturing', perc: '30%', desc: '投入高精度模具研发，确保产品工业设计的完美还原。' },
+                            { title: '内容制作', icon: 'movie_edit', perc: '40%', desc: '打造品牌核心内容生态，通过深度叙事与视觉建立共鸣。', highlight: true },
+                            { title: '团队建设', icon: 'groups', perc: '30%', desc: '吸纳顶尖技术与创意人才，构建全球化视野团队。' }
+                        ].map((card, i) => (
+                            <div key={i} className={`${card.highlight ? 'signature-gradient text-white shadow-xl' : 'bg-white text-on-surface shadow-sm'} p-8 rounded-xl flex flex-col justify-between`}>
+                                <div>
+                                    <div class="flex justify-between items-start mb-10">
+                                        <div className={`p-3 rounded-lg ${card.highlight ? 'bg-white/20' : 'bg-surface-container-high text-primary'}`}>
+                                            <span class="material-symbols-outlined text-3xl">{card.icon}</span>
+                                        </div>
+                                        <span className={`text-4xl font-headline font-black ${card.highlight ? 'text-white/30' : 'text-outline-variant opacity-40'}`}>{card.perc}</span>
+                                    </div>
+                                    <h3 class="text-2xl font-headline font-bold mb-4">{card.title}</h3>
+                                    <p className={`${card.highlight ? 'text-white/80' : 'text-on-surface-variant'} leading-relaxed text-sm`}>{card.desc}</p>
+                                </div>
+                                <div className={`mt-8 h-1 w-full rounded-full overflow-hidden ${card.highlight ? 'bg-white/20' : 'bg-surface-container'}`}>
+                                    <div className={`h-full ${card.highlight ? 'bg-white' : 'bg-primary'}`} style={{width: card.perc}}></div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div class="mt-20 relative overflow-hidden rounded-2xl bg-surface-container-high p-12 flex flex-col md:flex-row items-center gap-12">
+                        <div class="flex-1 z-10">
+                            <h2 class="text-3xl font-headline font-bold mb-6 flex items-center gap-3">
+                                <span class="material-symbols-outlined text-primary" style={{fontVariationSettings: '"FILL" 1'}}>visibility</span> 长期愿景
+                            </h2>
+                            <p class="text-2xl font-light text-on-surface leading-snug">
+                                我们不只是在制造一个工具，而是在定义一种全新的生活方式。FizzWand 将科技转化为触手可及的魔力。
+                            </p>
+                        </div>
+                        <div class="relative w-48 h-48 rounded-2xl overflow-hidden shadow-2xl rotate-3">
+                            <img alt="Future Vision" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5mjTGyrladpC3t0NKTKgbGYz8mBYafHC7Owvfny0_OHIAPNS7Gw5oFhcbf4MC-Yl_uLdQRPzUPUxH309eTfebUPMOgX8xmqjtr3b0aqSLuViH-FQsu4VVOkwXWszw5T3RghcP3Yi9dqyg8zR3nAeaKwK0v1jYvUKQgrmHqXWiJRTgrwSY8NW1mKadC2_e1txLyJY-qC4Uud3sQLVrwQB1M_uFGTAC-qbcjCOSlNT4YQywTISwg-ULBt6Bc2J73o4xdzVcpeNIrqk" />
+                        </div>
+                    </div>
+                </main>
+            </PageWrapper>
+        );
+
+        const Screen9_Thanks = () => (
+            <PageWrapper slideNumber="致谢">
+                <main class="canvas-16-9 bg-white shadow-2xl relative overflow-hidden flex flex-col justify-center items-center p-20 mx-auto my-24 rounded-xl">
+                    <div class="absolute top-[-10%] right-[-5%] w-[40%] h-[60%] bg-primary-container/10 rounded-full blur-[120px]"></div>
+                    <div class="absolute bottom-[-10%] left-[-5%] w-[30%] h-[50%] bg-secondary-container/15 rounded-full blur-[100px]"></div>
+                    <div class="absolute top-16 left-16">
+                        <span class="text-primary font-headline font-bold text-sm tracking-[0.2em] uppercase">Slide title: '致谢'</span>
+                    </div>
+                    <div class="relative z-10 text-center flex flex-col items-center gap-6">
+                        <h1 class="font-headline font-extrabold text-7xl md:text-8xl tracking-tighter leading-none mb-4 signature-gradient-text">谢谢观看</h1>
+                        <p class="font-headline text-2xl md:text-3xl font-light text-on-surface-variant tracking-wide">期待与您共同开启碳酸自由的魔法之旅</p>
+                        <div class="h-16"></div>
+                        <div class="flex flex-col md:flex-row gap-4 items-center justify-center w-full">
+                            <div class="bg-surface-container-low px-8 py-4 rounded-xl flex items-center gap-4 min-w-[240px]">
+                                <div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-primary" style={{fontVariationSettings: '"FILL" 1'}}>person</span>
+                                </div>
+                                <div class="text-left">
+                                    <span class="block text-[10px] uppercase tracking-widest text-outline">演讲人</span>
+                                    <span class="font-headline font-bold text-lg text-on-surface">太子瑞</span>
+                                </div>
+                            </div>
+                            <div class="bg-surface-container-low px-8 py-4 rounded-xl flex items-center gap-4 min-w-[240px]">
+                                <div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-primary" style={{fontVariationSettings: '"FILL" 1'}}>call</span>
+                                </div>
+                                <div class="text-left">
+                                    <span class="block text-[10px] uppercase tracking-widest text-outline">联系方式</span>
+                                    <span class="font-headline font-bold text-lg text-on-surface">support@tea.college</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-16 right-16 flex items-center gap-3">
+                        <div class="w-12 h-[2px] bg-primary"></div>
+                        <span class="font-headline font-black text-xl text-on-surface/20 tracking-tighter uppercase">FizzWand</span>
+                    </div>
+                </main>
+            </PageWrapper>
+        );
+
+        // --- App Component ---
+
+        const App = () => {
+            return (
+                <MemoryRouter>
+                    <Routes>
+                        <Route path="/" element={<Screen1_Intro />} />
+                        <Route path="/summary" element={<Screen2_Summary />} />
+                        <Route path="/inspiration" element={<Screen3_Inspiration />} />
+                        <Route path="/technology" element={<Screen4_Technology />} />
+                        <Route path="/products" element={<Screen5_Products />} />
+                        <Route path="/artisan" element={<Screen6_Artisan />} />
+                        <Route path="/marketing" element={<Screen7_Marketing />} />
+                        <Route path="/vision" element={<Screen8_Vision />} />
+                        <Route path="/thanks" element={<Screen9_Thanks />} />
+                    </Routes>
+                </MemoryRouter>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
