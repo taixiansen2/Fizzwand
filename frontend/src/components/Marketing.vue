@@ -1,19 +1,19 @@
 <template>
-  <main class="flex-grow flex items-center justify-center px-8 md:px-20 pt-24 pb-20 min-h-screen">
-    <div ref="containerRef" class="w-full max-w-screen-2xl aspect-16-9 bg-white overflow-hidden flex flex-col relative shadow-2xl rounded-xl opacity-0 scale-95 origin-center">
+  <main class="flex-grow flex items-center justify-center px-4 md:px-20 pt-28 pb-20 min-h-screen">
+    <div ref="containerRef" class="w-full max-w-screen-2xl md:aspect-16-9 bg-white overflow-hidden flex flex-col relative shadow-2xl rounded-xl opacity-0 scale-95 origin-center">
       <div class="absolute top-0 right-0 w-1/3 h-full bg-surface-container-low -z-10 translate-x-12"></div>
-      <div class="px-16 pt-12">
+      <div class="px-6 md:px-16 pt-8 md:pt-12">
         <div class="flex items-center gap-4 mb-4">
           <span class="h-[2px] w-12 bg-primary"></span>
           <span class="text-primary font-bold tracking-widest uppercase text-sm font-headline">Section 05</span>
         </div>
-        <h1 class="text-6xl font-extrabold font-headline tracking-tighter text-on-surface mb-6">营销策略</h1>
+        <h1 class="text-4xl md:text-6xl font-extrabold font-headline tracking-tighter text-on-surface mb-6">营销策略</h1>
       </div>
-      <div class="grid grid-cols-12 gap-12 px-16 flex-grow items-start z-10">
+      <div class="grid grid-cols-12 gap-8 md:gap-12 px-6 md:px-16 flex-grow items-start z-10">
         <div class="col-span-12 lg:col-span-7 flex flex-col gap-6">
-          <div ref="sloganRef" class="p-10 bg-surface-container-low rounded-lg relative overflow-hidden group hover:shadow-lg transition-shadow">
+          <div ref="sloganRef" class="p-6 md:p-10 bg-surface-container-low rounded-lg relative overflow-hidden group hover:shadow-lg transition-shadow">
             <h2 class="text-primary font-headline font-bold text-xl mb-4 tracking-tight">核心Slogan</h2>
-            <p class="text-4xl font-extrabold font-headline leading-tight text-on-surface-variant">
+            <p class="text-2xl md:text-4xl font-extrabold font-headline leading-tight text-on-surface-variant">
               FizzWand, <br/><span class="text-primary">理解您的小习惯</span>
             </p>
             <div class="absolute right-0 bottom-0 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -54,7 +54,7 @@
           </div>
         </div>
       </div>
-      <div class="pb-8 px-16 flex justify-between items-end">
+      <div class="pb-6 md:pb-8 px-6 md:px-16 mt-8 md:mt-0 flex justify-between items-end">
         <div class="flex gap-4"><div class="w-3 h-3 rounded-full bg-primary animate-pulse"></div><div class="w-3 h-3 rounded-full bg-primary-container animate-pulse" style="animation-delay: 0.5s"></div></div>
         <p class="text-[10px] font-label tracking-widest text-outline uppercase">Marketing Framework 2024</p>
       </div>

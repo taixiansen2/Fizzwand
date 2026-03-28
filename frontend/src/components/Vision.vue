@@ -1,11 +1,11 @@
 <template>
-  <main class="min-h-screen pt-32 pb-24 px-8 md:px-20 max-w-screen-2xl mx-auto flex flex-col justify-center w-full">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20 items-end">
+  <main class="min-h-screen pt-28 pb-20 px-8 md:px-20 max-w-screen-2xl mx-auto flex flex-col justify-center w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-20 items-end">
       <div ref="titleContainer" class="lg:col-span-5 opacity-0 -translate-x-10">
         <div class="mb-4">
           <span class="bg-secondary-container text-primary px-4 py-1 rounded-full text-[10px] font-semibold tracking-widest uppercase">Investment Phase</span>
         </div>
-        <h1 class="text-6xl md:text-7xl font-headline font-extrabold text-on-surface tracking-tighter leading-none mb-6">融资愿景</h1>
+        <h1 class="text-5xl md:text-7xl font-headline font-extrabold text-on-surface tracking-tighter leading-none mb-6">融资愿景</h1>
         <p class="text-xl text-on-surface-variant max-w-md leading-relaxed">构建科技与生活的无缝联结，FizzWand 致力于重塑未来交互体验的每一个瞬间。</p>
       </div>
       <div ref="fundContainer" class="lg:col-span-7 flex flex-col items-end opacity-0 translate-x-10">
@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div ref="visionBanner" class="mt-20 relative overflow-hidden rounded-2xl bg-surface-container-high p-12 flex flex-col md:flex-row items-center gap-12 opacity-0 translate-y-10">
+    <div ref="visionBanner" class="mt-12 md:mt-20 relative overflow-hidden rounded-2xl bg-surface-container-high p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 md:gap-12 opacity-0 translate-y-10">
       <div class="flex-1 z-10">
         <h2 class="text-3xl font-headline font-bold mb-6 flex items-center gap-3">
           <span class="material-symbols-outlined text-primary bg-white p-2 rounded-full shadow-sm" style="font-variation-settings: 'FILL' 1">visibility</span> 长期愿景
@@ -52,7 +52,7 @@
           让 FizzWand 成为全球数千万肠胃敏感者及无气饮料爱好者的口袋标配，<span class="font-medium text-primary">将一个“怪癖”变成一种全新的生活方式！</span>
         </p>
       </div>
-      <div class="relative w-64 h-64 rounded-2xl overflow-hidden shadow-2xl md:rotate-3 group cursor-pointer">
+      <div class="relative w-full md:w-64 h-64 rounded-2xl overflow-hidden shadow-2xl md:rotate-3 group cursor-pointer">
         <img alt="Future Vision" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5mjTGyrladpC3t0NKTKgbGYz8mBYafHC7Owvfny0_OHIAPNS7Gw5oFhcbf4MC-Yl_uLdQRPzUPUxH309eTfebUPMOgX8xmqjtr3b0aqSLuViH-FQsu4VVOkwXWszw5T3RghcP3Yi9dqyg8zR3nAeaKwK0v1jYvUKQgrmHqXWiJRTgrwSY8NW1mKadC2_e1txLyJY-qC4Uud3sQLVrwQB1M_uFGTAC-qbcjCOSlNT4YQywTISwg-ULBt6Bc2J73o4xdzVcpeNIrqk" />
         <div class="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity"></div>
       </div>

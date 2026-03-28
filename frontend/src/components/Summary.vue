@@ -1,10 +1,10 @@
 <template>
-  <main class="flex-grow flex flex-col items-center justify-center px-6 md:px-20 py-24 pt-32 overflow-hidden w-full min-h-screen">
-    <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-16 items-start mx-auto">
+  <main class="flex-grow flex flex-col items-center justify-center px-6 md:px-20 pt-20 pb-20 w-full min-h-screen bg-transparent">
+    <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-start mx-auto">
       <div ref="leftCol" class="lg:col-span-5 flex flex-col space-y-12 opacity-0 -translate-x-10">
         <div class="space-y-4">
           <p class="text-primary font-headline font-bold text-sm tracking-[0.2em] uppercase">Executive Summary</p>
-          <h1 class="text-on-surface font-headline font-extrabold text-5xl md:text-6xl tracking-tight leading-tight">项目摘要</h1>
+          <h1 class="text-on-surface font-headline font-extrabold text-4xl md:text-6xl tracking-tight leading-tight">项目摘要</h1>
           <p v-if="apiStatus" class="text-secondary font-medium mt-2 bg-secondary-container/20 p-2 rounded inline-block text-sm">
             Backend Status: {{ apiStatus }}
           </p>
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div ref="rightCol" class="lg:col-span-7 relative opacity-0 translate-x-10">
-        <div class="bg-surface-container-low rounded-xl p-1 w-full aspect-[4/3] flex items-center justify-center relative overflow-hidden">
+        <div class="bg-surface-container-low rounded-xl p-1 w-full aspect-square md:aspect-[4/3] flex items-center justify-center relative overflow-hidden">
           <div class="absolute inset-0 opacity-10 pointer-events-none">
             <svg class="w-full h-full animate-spin-slow" viewBox="0 0 400 300">
               <circle class="text-primary" cx="200" cy="150" fill="none" r="100" stroke="currentColor" stroke-width="0.5"></circle>

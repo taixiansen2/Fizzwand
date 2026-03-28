@@ -1,5 +1,5 @@
 <template>
-  <main class="min-h-screen relative bg-surface-container-low overflow-hidden pt-24 pb-16 px-6 md:px-12 w-full flex flex-col items-center">
+  <main class="min-h-screen relative bg-surface-container-low overflow-x-hidden pt-28 pb-20 px-6 md:px-12 w-full flex flex-col items-center justify-center">
     
     <!-- Bubble Animation Background -->
     <div class="absolute inset-0 pointer-events-none z-0 overflow-hidden" ref="bubbleContainer">

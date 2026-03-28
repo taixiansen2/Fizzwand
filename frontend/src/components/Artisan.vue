@@ -1,20 +1,20 @@
 <template>
-  <main class="w-full min-h-screen pt-32 pb-24 px-16 flex flex-col justify-start max-w-screen-2xl mx-auto overflow-hidden">
+  <main class="w-full min-h-screen pt-28 pb-20 px-6 md:px-16 flex flex-col justify-center max-w-screen-2xl mx-auto">
     <div ref="headerRef" class="mb-16 opacity-0 -translate-x-10">
       <p class="font-label text-xs uppercase tracking-[0.2em] text-primary mb-3">Product Line Strategy</p>
-      <h1 class="font-headline text-[3.25rem] font-extrabold tracking-tight text-on-surface leading-tight">
+      <h1 class="font-headline text-4xl md:text-[3.25rem] font-extrabold tracking-tight text-on-surface leading-tight">
         产品线: <span class="text-primary">雕塑版</span>与联名愿景
       </h1>
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-24 items-start">
       <section ref="leftCol" class="space-y-10 opacity-0 translate-y-10">
         <div class="flex items-center gap-4">
           <div class="h-px w-10 bg-primary"></div>
           <h2 class="font-headline text-2xl font-bold tracking-tight text-on-surface">雕塑版 (Artisan)</h2>
         </div>
-        <div class="space-y-6 pl-14">
+        <div class="space-y-6 pl-2 md:pl-14">
           <div class="aspect-video w-full overflow-hidden rounded-xl bg-surface-container-low mb-8 shadow-sm group">
-            <img alt="Artisan" class="w-full h-full object-contain transition-transform duration-1000 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida/ADBb0ugn7Vf5QaTcPMIYI3fx_Lt4kgAeLN1aD0Bz5bHbsxjhoJHazJdCojji0OdDnDCj_L5J_BKXLVkcNkYXZE2VqhIwG6D1ueg27BiDtUD3xSH0bQRmWrwZQaTjbl6e29F4UA4mrpn-y9_B-E6MspPUPFXU4OxPI2MQqONDnUz1hoL6QtYshBhMJpB9AnwlRBgfMeaBuLERhxN4bTw6OU4WIx8-ijnPUBd6q1NZ-wBRn99Tf4sANvVWuev_Fi7E16zqYzBB_cZjRXMsvg" />
+            <img alt="Artisan" class="w-full h-full object-contain transition-transform duration-1000 group-hover:scale-110" src="/fizzwand_thinker.png" />
           </div>
           <div class="space-y-3">
             <span class="text-[10px] font-bold text-primary uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full inline-block mb-2">Materiality</span>
@@ -37,7 +37,7 @@
           <div class="h-px w-10 bg-primary"></div>
           <h2 class="font-headline text-2xl font-bold tracking-tight text-on-surface">联名愿景 (Co-branding)</h2>
         </div>
-        <div class="space-y-8 pl-14">
+        <div class="space-y-8 pl-2 md:pl-14">
           <div class="space-y-3 p-6 bg-surface-container-low rounded-xl hover:bg-surface-container transition-colors">
             <span class="text-[10px] font-bold text-primary uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full inline-block mb-2">Lifestyle Synergy</span>
             <p class="text-on-surface text-lg font-medium leading-relaxed">跨界联动全球顶尖生活方式品牌。将 FizzWand 融入高净值人群的日常美学空间。</p>

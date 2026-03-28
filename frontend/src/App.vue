@@ -1,29 +1,50 @@
 <template>
   <div class="min-h-screen flex flex-col bg-surface-container-low w-full relative">
     <header class="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl shadow-sm">
-      <div class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
-        <router-link to="/" class="text-2xl font-black text-slate-900 dark:text-white tracking-tighter font-headline">FizzWand</router-link>
+      <div class="flex justify-between items-center w-full px-6 md:px-8 py-4 max-w-screen-2xl mx-auto">
+        <router-link to="/" class="text-2xl font-black text-slate-900 dark:text-white tracking-tighter font-headline z-[60]">FizzWand</router-link>
+        
+        <!-- Desktop Nav -->
         <nav class="hidden md:flex items-center gap-6">
-          <router-link v-for="item in navItems" :key="item.path" :to="item.path"
+          <router-link v-for="item in navItems" :key="item.hash" :to="{ path: '/', hash: item.hash }"
             :class="['font-manrope font-bold tracking-tight text-sm transition-colors',
-              $route.path === item.path ? 'text-cyan-600 dark:text-cyan-400 border-b-2 border-cyan-500 pb-1' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100']">
+              $route.hash === item.hash || ($route.hash === '' && item.hash === '#overview') ? 'text-cyan-600 dark:text-cyan-400 border-b-2 border-cyan-500 pb-1' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100']">
             {{ item.name }}
           </router-link>
         </nav>
-        <div class="flex items-center gap-4">
-          <span class="material-symbols-outlined cursor-pointer hover:bg-slate-50/50 p-2 rounded-full transition-all">more_vert</span>
+        
+        <!-- Mobile Nav Toggle -->
+        <div class="flex items-center gap-4 md:hidden z-[60]">
+          <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="text-slate-900 dark:text-white focus:outline-none">
+            <span class="material-symbols-outlined text-3xl">{{ isMobileMenuOpen ? 'close' : 'menu' }}</span>
+          </button>
         </div>
       </div>
+      
+      <!-- Mobile Nav Menu Overlay -->
+      <transition name="slide-down">
+        <div v-if="isMobileMenuOpen" class="fixed inset-0 bg-white/95 dark:bg-slate-950/95 backdrop-blur-3xl z-50 flex flex-col items-center justify-center h-screen w-screen md:hidden">
+          <nav class="flex flex-col items-center gap-8 w-full px-8">
+            <router-link v-for="item in navItems" :key="item.hash" :to="{ path: '/', hash: item.hash }" @click="isMobileMenuOpen = false"
+              :class="['font-headline font-bold tracking-wider text-2xl transition-colors w-full text-center py-2',
+                $route.hash === item.hash || ($route.hash === '' && item.hash === '#overview') ? 'text-cyan-600 dark:text-cyan-400' : 'text-slate-600 dark:text-slate-300 active:text-slate-900']">
+              {{ item.name }}
+            </router-link>
+          </nav>
+        </div>
+      </transition>
     </header>
-    <div class="flex-grow w-full relative">
+
+    <div class="flex-grow w-full relative pt-16">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
         </transition>
       </router-view>
     </div>
-    <footer class="fixed bottom-0 w-full py-4 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-t border-slate-100 dark:border-slate-800/50 z-50">
-      <div class="flex flex-col md:flex-row justify-between items-center px-12 w-full gap-4 max-w-screen-2xl mx-auto">
+    
+    <footer class="fixed bottom-0 w-full py-2 md:py-4 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-t border-slate-100 dark:border-slate-800/50 z-40">
+      <div class="flex flex-col md:flex-row justify-between items-center px-4 md:px-12 w-full gap-2 md:gap-4 max-w-screen-2xl mx-auto">
         <div class="text-[10px] font-bold text-slate-400">FizzWand Tech-Lifestyle</div>
         <div class="font-inter text-[10px] uppercase tracking-widest text-slate-400 dark:text-slate-500">
           © 2024 FizzWand. All rights reserved.
@@ -38,16 +59,20 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
+const isMobileMenuOpen = ref(false)
+
 const navItems = [
-  { name: 'Overview', path: '/' },
-  { name: 'Summary', path: '/summary' },
-  { name: 'Inspiration', path: '/inspiration' },
-  { name: 'Technology', path: '/technology' },
-  { name: 'Products', path: '/products' },
-  { name: 'Artisan', path: '/artisan' },
-  { name: 'Marketing', path: '/marketing' },
-  { name: 'Vision', path: '/vision' },
-  { name: 'Thanks', path: '/thanks' }
+  { name: 'Overview', hash: '#overview' },
+  { name: 'Summary', hash: '#summary' },
+  { name: 'Inspiration', hash: '#inspiration' },
+  { name: 'Technology', hash: '#technology' },
+  { name: 'Products', hash: '#products' },
+  { name: 'Artisan', hash: '#artisan' },
+  { name: 'Marketing', hash: '#marketing' },
+  { name: 'Vision', hash: '#vision' },
+  { name: 'Thanks', hash: '#thanks' }
 ];
 </script>
 
@@ -60,6 +85,17 @@ const navItems = [
 .fade-leave-to {
   opacity: 0;
 }
+
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.slide-down-enter-from,
+.slide-down-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
 #app {
   width: 100vw;
   max-width: 100vw;

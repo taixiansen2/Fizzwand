@@ -1,9 +1,9 @@
 <template>
-  <main class="min-h-screen pt-32 pb-16 px-6 md:px-12 max-w-[1600px] mx-auto w-full">
+  <main class="min-h-screen pt-28 pb-20 px-6 md:px-12 max-w-[1600px] mx-auto w-full flex flex-col justify-center">
     <section ref="headerRef" class="mb-12 opacity-0 -translate-y-5">
       <div class="flex flex-col gap-2">
         <span class="text-[0.75rem] font-bold tracking-[0.2em] text-primary uppercase font-label">Core Technology</span>
-        <h1 class="text-[3.5rem] font-extrabold text-on-surface font-headline leading-tight tracking-tighter">技术原理与产品优势</h1>
+        <h1 class="text-4xl md:text-[3.5rem] font-extrabold text-on-surface font-headline leading-tight tracking-tighter">技术原理与产品优势</h1>
       </div>
     </section>
     <div class="grid grid-cols-12 gap-8">
@@ -32,11 +32,11 @@
           </div>
         </div>
       </div>
-      <div ref="rightCol" class="col-span-12 lg:col-span-8 flex items-center justify-center relative min-h-[450px] bg-surface-container-low rounded-2xl overflow-hidden opacity-0 translate-x-[20px]">
+      <div ref="rightCol" class="col-span-12 lg:col-span-8 flex items-center justify-center relative min-h-[350px] md:min-h-[450px] bg-surface-container-low rounded-2xl overflow-hidden opacity-0 translate-x-[20px] mt-6 lg:mt-0">
         <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#006571 1px, transparent 1px); background-size: 40px 40px"></div>
         <div class="relative w-full h-full flex items-center justify-center p-12">
           <div class="absolute w-[2px] h-[70%] bg-gradient-to-b from-primary via-primary-container to-transparent z-10 shadow-[0_0_20px_rgba(0,227,253,0.5)]"></div>
-          <div class="relative z-20 flex flex-wrap justify-center gap-12 max-w-xl">
+          <div class="relative z-20 flex flex-wrap justify-center gap-6 md:gap-12 max-w-xl scale-75 md:scale-100">
             <div class="tech-node w-28 h-28 rounded-full bg-white/70 backdrop-blur-xl border border-primary/10 flex items-center justify-center shadow-2xl relative hover:-translate-y-2 transition-transform cursor-pointer">
               <span class="material-symbols-outlined text-primary text-3xl">bubble_chart</span>
               <div class="absolute -bottom-6 text-[10px] font-bold text-primary tracking-widest uppercase w-max text-center">Initial Stage</div>
